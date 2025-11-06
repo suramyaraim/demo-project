@@ -1,0 +1,5 @@
+ Hello docker
+Hello from inside the container
+hii
+hii user
+hello coding 
