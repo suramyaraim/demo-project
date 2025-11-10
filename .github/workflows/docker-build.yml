@@ -19,7 +19,7 @@ jobs:
       - name: Set version
         id: set-version
         run: |
-          VERSION="v1.0.1"
+          VERSION=$(git describe --tags --abbrev=0)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
