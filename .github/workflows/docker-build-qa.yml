@@ -19,10 +19,10 @@ jobs:
 
       - name: Build Docker Image for QA
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/demo:qa-latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/demo-qa:latest .
 
       - name: Push Docker Image for QA
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/demo:qa-latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/demo-qa:latest
 
       - name: Print status
         run: echo "Successfully pushed qa-latest image"
