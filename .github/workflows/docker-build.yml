@@ -47,13 +47,13 @@ jobs:
 
       - name: Build Production Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/image:${{ env.VERSION }} .
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/image:latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/demo:${{ env.VERSION }} .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/demo:latest .
 
       - name: Push Production Docker Images
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/image:${{ env.VERSION }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/image:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/demo:${{ env.VERSION }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/demo:latest
 
       - name: Update Deployment Status
         run: |
