@@ -27,6 +27,7 @@ jobs:
         run: npm test  
 
   build_and_push:
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -47,5 +48,5 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/demo:latest
 
       - name: Done
-        run: echo "✅ Pushed version ${{ env.VERSION }} and latest"
+        run: echo "Pushed version ${{ env.VERSION }} and latest"
 
