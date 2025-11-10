@@ -10,35 +10,51 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-      
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20.8.1'
-      
+
       - name: Install Dependencies
         run: npm install
 
       - name: Run Tests
         run: npm test  
 
-  build_and_push:
-    needs: test
+  version:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set-version.outputs.VERSION }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
+      - name: Set version
+        id: set-version
+        run: |
+          VERSION="v1.0.1"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+  build_and_push:
+    needs: [test, version]
+    runs-on: ubuntu-latest
+    if: needs.version.outputs.version != 'none'
+    env:
+      VERSION: ${{ needs.version.outputs.version }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set version
-        run: echo "VERSION=1.0.${{ github.run_number }}" >> $GITHUB_ENV
-
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Build & Push Docker Image
         run: |
@@ -48,5 +64,4 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/demo:latest
 
       - name: Done
-        run: echo "Pushed version ${{ env.VERSION }} and latest"
-
+        run: echo "✅ Pushed version ${{ env.VERSION }} and latest"

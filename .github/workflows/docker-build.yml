@@ -2,7 +2,7 @@ name: Build and Publish image to Docker Hub
 
 on:
   push:
-    branches: [dev, qa, main]
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -19,7 +19,6 @@ jobs:
       - name: Set version
         id: set-version
         run: |
-          # Set your desired version here
           VERSION="v1.0.1"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
