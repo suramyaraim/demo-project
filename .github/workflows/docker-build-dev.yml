@@ -19,10 +19,10 @@ jobs:
 
       - name: Build Docker Image for Dev
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/demo:dev-latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/demo-dev:latest .
 
       - name: Push Docker Image for Dev
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/demo:dev-latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/demo-dev:latest
 
       - name: Print status
         run: echo "Successfully pushed dev-latest image"
