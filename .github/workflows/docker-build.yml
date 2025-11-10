@@ -32,4 +32,4 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/demo:latest
 
       - name: Print status
-        run: echo "✅ Successfully pushed version ${{ env.VERSION }} and latest"
+        run: echo "Successfully pushed version ${{ env.VERSION }} and latest"
