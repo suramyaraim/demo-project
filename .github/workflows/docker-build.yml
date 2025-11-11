@@ -51,13 +51,13 @@ jobs:
       - name: Run Semantic Release
         id: semantic
         run: |
-          # Run semantic-release and capture output (does not fail)
+          
           OUTPUT=$(npx semantic-release 2>&1 || true)
 
-          # Extract the next release version from log
+          
           VERSION=$(echo "$OUTPUT" | grep "The next release version is" | awk '{print $6}')
           
-          # If no release was created, set version to 'none'
+          
           if [ -z "$VERSION" ]; then
             VERSION=none
           fi
