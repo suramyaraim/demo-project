@@ -78,15 +78,10 @@ jobs:
       - name: Get Released Version
         id: setver
         run: |
-          VERSION=$(npx semantic-release --dry-run | grep 'The next release version is' | awk '{print $6}')
-
-          if [ -z "$VERSION" ]; then
-            VERSION=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+            VERSION=$(git describe --tags --abbrev=0)
             VERSION=${VERSION#v}
-          fi
-
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "VERSION=$VERSION" >> $GITHUB_ENV
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
 
   build_and_push:
     needs: [test, version]

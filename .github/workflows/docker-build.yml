@@ -59,8 +59,6 @@ jobs:
           
             VERSION=$(git describe --tags --abbrev=0)
             VERSION=${VERSION#v}
-          
-
             echo "version=$VERSION" >> $GITHUB_OUTPUT
             echo "VERSION=$VERSION"
 
