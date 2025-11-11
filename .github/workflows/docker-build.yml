@@ -15,7 +15,7 @@ jobs:
       pull-requests: write
 
     outputs:
-      version: ${{ steps.setver.outputs.version }}
+      version: ${{ steps.semantic.outputs.version }}
 
     steps:
       - name: Checkout repository
@@ -32,45 +32,31 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      # - name: Run Semantic Release
-      #   id: semantic
-      #   run: |
-      #     npx semantic-release || echo "no new release"
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GH_NEW_PAT }}
-     
-      # - name: Get Released Version
-      #   id: setver
-      #   run: |
-      #     git fetch --tags
-      #     VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
-      #     VERSION=${VERSION#v}
-      #     echo "version=$VERSION" >> $GITHUB_OUTPUT
-      #     echo "Detected release version: $VERSION"
-
       - name: Run Semantic Release
         id: semantic
         run: |
-          
+          set -euo pipefail
+
+          echo "Running semantic-release..."
+          # Run semantic-release and capture output
           OUTPUT=$(npx semantic-release 2>&1 || true)
 
-          
-          VERSION=$(echo "$OUTPUT" | grep "The next release version is" | awk '{print $6}')
-          
-          
+          # Extract the released version from output
+          VERSION=$(echo "$OUTPUT" | grep -oP 'Published release \K[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?' || true)
+
           if [ -z "$VERSION" ]; then
             VERSION=none
+            echo "⚠ No new release published."
           fi
-          
+
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Released version: $VERSION"
+          echo "✅ Released version: $VERSION"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_NEW_PAT }}
 
       - name: Use released version
         run: echo "The released version is ${{ steps.semantic.outputs.version }}"
 
-          
   build-and-push:
     name: Build & Push Production Docker Image
     runs-on: ubuntu-latest
