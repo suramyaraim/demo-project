@@ -1,3 +1,10 @@
+## [1.2.10](https://github.com/suramyaraim/demo-project/compare/v1.2.9...v1.2.10) (2025-11-11)
+
+
+### Bug Fixes
+
+* Docker build ([8e9ee69](https://github.com/suramyaraim/demo-project/commit/8e9ee691e77e2d8b2576c912f16ae405373095c3))
+
 ## [1.2.9](https://github.com/suramyaraim/demo-project/compare/v1.2.8...v1.2.9) (2025-11-11)
 
 
