@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/suramyaraim/demo-project/compare/v1.1.0...v1.2.0) (2025-11-11)
+
+
+### Features
+
+* trigger release ([aee6d9f](https://github.com/suramyaraim/demo-project/commit/aee6d9f19006e4ab5304b667c618cf970af54543))
+* trigger release ([dad4d37](https://github.com/suramyaraim/demo-project/commit/dad4d371e396928f8a510874ed034c267878f0a3))
+
 # [1.1.0](https://github.com/suramyaraim/demo-project/compare/v1.0.1...v1.1.0) (2025-11-11)
 
 
