@@ -46,6 +46,7 @@ jobs:
 
           if [ -z "$VERSION" ]; then
             VERSION=$(git describe --tags --abbrev=0)
+            VERSION=${VERSION#v}
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "VERSION=$VERSION"
