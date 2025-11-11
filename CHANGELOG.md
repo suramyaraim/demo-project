@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/suramyaraim/demo-project/compare/v1.2.0...v1.2.1) (2025-11-11)
+
+
+### Bug Fixes
+
+* correctly propagate semantic version to Docker build ([eedc874](https://github.com/suramyaraim/demo-project/commit/eedc874f24860bae718f5c8c71ff982afdb781b1))
+
 # [1.2.0](https://github.com/suramyaraim/demo-project/compare/v1.1.0...v1.2.0) (2025-11-11)
 
 
