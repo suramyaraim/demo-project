@@ -61,20 +61,32 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_NEW_PAT }}
 
-      - name: Fetch Latest Tags
-        run: |
-          git fetch --tags origin
-          git tag --list | tail -n 5
+      # - name: Fetch Latest Tags
+      #   run: |
+      #     git fetch --tags origin
+      #     git tag --list | tail -n 5
+
+      # - name: Get Released Version
+      #   id: setver
+      #   run: |
+      #     git fetch --tags
+      #     VERSION=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+      #     VERSION=${VERSION#v}
+      #     echo "VERSION=$VERSION" >> $GITHUB_ENV
+      #     echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Get Released Version
         id: setver
         run: |
-          git fetch --tags
-          VERSION=$(git describe --tags "$(git rev-list --tags --max-count=1)")
-          VERSION=${VERSION#v}
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          VERSION=$(npx semantic-release --dry-run | grep 'The next release version is' | awk '{print $6}')
 
+          if [ -z "$VERSION" ]; then
+            VERSION=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+            VERSION=${VERSION#v}
+          fi
+
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
   build_and_push:
     needs: [test, version]
