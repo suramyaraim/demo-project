@@ -1,3 +1,10 @@
+## [1.2.25](https://github.com/suramyaraim/demo-project/compare/v1.2.24...v1.2.25) (2025-11-11)
+
+
+### Bug Fixes
+
+* build commit ([fb4c711](https://github.com/suramyaraim/demo-project/commit/fb4c711d843b6b615727de0dc5cb36822f28b91f))
+
 ## [1.2.24](https://github.com/suramyaraim/demo-project/compare/v1.2.23...v1.2.24) (2025-11-11)
 
 
