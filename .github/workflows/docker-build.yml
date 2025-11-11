@@ -7,17 +7,22 @@ on:
     branches: [main]
 
 jobs:
-
   version:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
     outputs:
       version: ${{ steps.get-version.outputs.VERSION }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GH_PAT }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -31,7 +36,7 @@ jobs:
         id: semantic
         run: npx semantic-release
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
       - name: Get Released Version
         id: get-version
@@ -45,8 +50,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: version
     if: needs.version.outputs.version != 'none'
+
     env:
       VERSION: ${{ needs.version.outputs.version }}
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
