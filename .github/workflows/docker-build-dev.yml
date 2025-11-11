@@ -25,4 +25,4 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/demo-dev:latest
 
       - name: Print status
-        run: echo "Successfully pushed dev-latest image"
+        run: echo "Successfully pushed dev-latest images"
