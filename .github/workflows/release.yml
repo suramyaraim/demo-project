@@ -16,8 +16,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   
-          token: ${{ secrets.GH_NEW_PAT }} 
+          fetch-depth: 0
+          token: ${{ secrets.GH_NEW_PAT }}
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Pull latest main before release
+        run: |
+          git fetch origin main
+          git rebase origin/main || git pull --rebase
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -25,7 +35,9 @@ jobs:
           node-version: 22
 
       - run: npm ci
-      - run: npx semantic-release
+
+      - name: Run Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_NEW_PAT }}
-       
+        run: |
+          npx semantic-release
