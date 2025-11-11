@@ -79,4 +79,4 @@ jobs:
 
       - name: Update Deployment Status
         run: |
-          echo "Production deployment completed for version ${{ env.VERSION }}"
+          echo "Production deployment completed for version ${{ env.VERSION }} and latest"
