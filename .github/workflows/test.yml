@@ -99,4 +99,4 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/demo:latest
 
       - name: Deployment Complete
-        run: echo "Successfully pushed version ${{ env.VERSION }} and latest image"
+        run: echo "Successfully pushed version ${{ env.VERSION }} and latest"
