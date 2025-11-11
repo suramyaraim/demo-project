@@ -57,18 +57,19 @@ jobs:
       - name: Run Semantic Release
         id: semantic
         run: |
-          npx semantic-release || echo "no new release"
+          VERSION=$(npx semantic-release --branches main --no-ci 2>&1 | grep -oP 'The next release version is \K[^\s]+')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GH_NEW_PAT }}
 
-      - name: Fetch Latest Tag (Newly Created)
-        id: setver
-        run: |
-          git fetch --tags
-          VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
-          VERSION=${VERSION#v}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Detected release version: $VERSION"
+      # - name: Fetch Latest Tag (Newly Created)
+      #   id: setver
+      #   run: |
+      #     git fetch --tags
+      #     VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
+      #     VERSION=${VERSION#v}
+      #     echo "version=$VERSION" >> $GITHUB_OUTPUT
+      #     echo "Detected release version: $VERSION"
 
   build_and_push:
     runs-on: ubuntu-latest
