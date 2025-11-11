@@ -48,5 +48,5 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/demo:latest
 
       - name: Done
-        run: echo "Pushed version ${{ env.VERSION }} and latest"
+        run: echo "Pushed version ${{ env.VERSION }} and latest image"
 
