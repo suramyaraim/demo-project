@@ -1,3 +1,10 @@
+## [1.2.29](https://github.com/suramyaraim/demo-project/compare/v1.2.28...v1.2.29) (2025-11-11)
+
+
+### Bug Fixes
+
+* build ([77079b4](https://github.com/suramyaraim/demo-project/commit/77079b46545b3e938ab31d32d30978bc701bfef4))
+
 ## [1.2.28](https://github.com/suramyaraim/demo-project/compare/v1.2.27...v1.2.28) (2025-11-11)
 
 
