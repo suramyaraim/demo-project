@@ -8,15 +8,14 @@ on:
 
 jobs:
   version:
-    name: Semantic Release
     runs-on: ubuntu-latest
     permissions:
       contents: write
       issues: write
       pull-requests: write
 
-    outputs:
-      version: ${{ steps.get-version.outputs.VERSION }}
+   outputs:
+      version: ${{ steps.setver.outputs.version }}
 
     steps:
       - name: Checkout repository
@@ -35,23 +34,17 @@ jobs:
 
       - name: Run Semantic Release
         id: semantic
-        run: npx semantic-release
+        run: |
+          npx semantic-release || echo "no new release"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_NEW_PAT }}
 
-      - name: Get Released Version
-        id: get-version
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "VERSION=$VERSION"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-
   build-and-push:
-    name: Build & Push Docker Image
+    name: Build & Push Production Docker Image
     runs-on: ubuntu-latest
     needs: version
     if: needs.version.outputs.version != ''
+
     env:
       VERSION: ${{ needs.version.outputs.version }}
 
@@ -60,20 +53,21 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          token: ${{ secrets.GH_NEW_PAT }}
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Build and Tag Docker Image
+      - name: Build Production Docker Image
         run: |
-          echo "Building Docker image with tag $VERSION"
           docker build -t ${{ secrets.DOCKER_USERNAME }}/demo:${{ env.VERSION }} .
           docker tag ${{ secrets.DOCKER_USERNAME }}/demo:${{ env.VERSION }} ${{ secrets.DOCKER_USERNAME }}/demo:latest
 
-      - name: Push Docker Images
+      - name: Push Production Docker Images
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/demo:${{ env.VERSION }}
           docker push ${{ secrets.DOCKER_USERNAME }}/demo:latest
 
       - name: Update Deployment Status
-        run: echo "Production deployment completed for version ${{ env.VERSION }}"
+        run: |
+          echo "Production deployment completed for version ${{ env.VERSION }}"
