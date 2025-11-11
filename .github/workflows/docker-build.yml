@@ -43,7 +43,8 @@ jobs:
         id: setver
         run: |
 
-            VERSION=$(node -p "require('./package.json').version")
+            git fetch --tags
+            VERSION=$(git describe --tags --abbrev=0)
             VERSION=${VERSION#v}
             echo "version=$VERSION" >> $GITHUB_OUTPUT
             echo "VERSION=$VERSION"
