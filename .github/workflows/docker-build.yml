@@ -60,6 +60,7 @@ jobs:
           fi
           
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Released version: $VERSION"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_NEW_PAT }}
 
@@ -71,7 +72,7 @@ jobs:
     name: Build & Push Production Docker Image
     runs-on: ubuntu-latest
     needs: version
-    if: needs.version.outputs.version != ''
+    if: needs.version.outputs.version != 'none'
 
     env:
       VERSION: ${{ needs.version.outputs.version }}
