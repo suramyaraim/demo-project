@@ -80,8 +80,9 @@ jobs:
         run: |
             VERSION=$(git describe --tags --abbrev=0)
             VERSION=${VERSION#v}
-            echo "VERSION=$VERSION" >> $GITHUB_ENV
+            
             echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "VERSION=$VERSION"
 
   build_and_push:
     needs: [test, version]
