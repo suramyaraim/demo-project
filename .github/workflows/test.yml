@@ -10,11 +10,11 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
+          fetch-depth: 0
           token: ${{ secrets.GH_NEW_PAT }}
 
       - name: Set up Node.js
@@ -28,10 +28,9 @@ jobs:
       - name: Run Tests
         run: npm test  
 
-
   version:
     runs-on: ubuntu-latest
-    needs: test  
+    needs: test
     permissions:
       contents: write
       issues: write
@@ -61,40 +60,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_NEW_PAT }}
 
-      # - name: Fetch Latest Tags
-      #   run: |
-      #     git fetch --tags origin
-      #     git tag --list | tail -n 5
-
-      # - name: Get Released Version
-      #   id: setver
-      #   run: |
-      #     git fetch --tags
-      #     VERSION=$(git describe --tags "$(git rev-list --tags --max-count=1)")
-      #     VERSION=${VERSION#v}
-      #     echo "VERSION=$VERSION" >> $GITHUB_ENV
-      #     echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-
       - name: Get Released Version
         id: setver
         run: |
-            VERSION=$(git describe --tags --abbrev=0)
-            VERSION=${VERSION#v}
-            
-            echo "version=$VERSION" >> $GITHUB_OUTPUT
-            echo "VERSION=$VERSION"
+          git fetch --tags
+          VERSION=$(git describe --tags --abbrev=0)
+          VERSION=${VERSION#v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "VERSION=$VERSION"
 
   build_and_push:
     needs: [test, version]
     runs-on: ubuntu-latest
-    if: needs.version.outputs.version != 'none'
-
+    if: needs.version.outputs.version != ''
     env:
       VERSION: ${{ needs.version.outputs.version }}
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_NEW_PAT }}
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
