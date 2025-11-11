@@ -14,7 +14,7 @@ jobs:
       issues: write
       pull-requests: write
 
-   outputs:
+    outputs:
       version: ${{ steps.setver.outputs.version }}
 
     steps:
@@ -38,6 +38,13 @@ jobs:
           npx semantic-release || echo "no new release"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_NEW_PAT }}
+
+      - name: Get Released Version
+        id: setver
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "VERSION=$VERSION"
 
   build-and-push:
     name: Build & Push Production Docker Image
