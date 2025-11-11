@@ -73,7 +73,7 @@ jobs:
   build_and_push:
     needs: [test, version]
     runs-on: ubuntu-latest
-    if: needs.version.outputs.version != ''
+    if: needs.version.outputs.version != 'none'
     env:
       VERSION: ${{ needs.version.outputs.version }}
 

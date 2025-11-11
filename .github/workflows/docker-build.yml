@@ -52,7 +52,7 @@ jobs:
     name: Build & Push Production Docker Image
     runs-on: ubuntu-latest
     needs: version
-    if: needs.version.outputs.version != ''
+    if: needs.version.outputs.version != 'none'
 
     env:
       VERSION: ${{ needs.version.outputs.version }}
