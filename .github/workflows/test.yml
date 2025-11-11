@@ -49,20 +49,23 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Get Next Semantic Release Version
+      - name: Run Semantic Release
+        id: release
+        run: |
+          npx semantic-release || echo "no new release"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_NEW_PAT }}
+
+      - name: Fetch latest tag (newly created)
         id: setver
         run: |
-          
-          VERSION=$(npx semantic-release --dry-run --ci | grep 'The next release version is' | awk '{print $6}')
-          
-          if [ -z "$VERSION" ]; then
-            git fetch --tags
-            VERSION=$(git describe --tags --abbrev=0)
-            VERSION=${VERSION#v}
-          fi
-
+          # Always fetch remote tags after semantic-release may have pushed one
+          git fetch --tags
+          VERSION=$(git describe --tags --abbrev=0)
+          VERSION=${VERSION#v}
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "VERSION=$VERSION"
+
 
   build_and_push:
     needs: [test, version]
