@@ -64,16 +64,16 @@ jobs:
       - name: Get Released Version
         id: setver
         run: |
-          git fetch --tags
-          VERSION=$(git describe --tags --abbrev=0)
-          VERSION=${VERSION#v}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "VERSION=$VERSION"
+           
+            VERSION=$(git describe --tags --abbrev=0)
+            VERSION=${VERSION#v}
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "VERSION=$VERSION"
 
   build_and_push:
     needs: [test, version]
     runs-on: ubuntu-latest
-    if: needs.version.outputs.version != 'none'
+    if: needs.version.outputs.version != ''
     env:
       VERSION: ${{ needs.version.outputs.version }}
 
