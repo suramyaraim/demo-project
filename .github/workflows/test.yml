@@ -66,6 +66,7 @@ jobs:
         run: |
           git fetch --tags
           VERSION=$(git describe --tags --abbrev=0)
+          VERSION=${VERSION#v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
