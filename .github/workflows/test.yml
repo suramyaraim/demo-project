@@ -38,7 +38,7 @@ jobs:
       pull-requests: write
 
     outputs:
-      version: ${{ steps.get-version.outputs.VERSION }}
+      version: ${{ steps.setver.outputs.version }}
 
     steps:
       - name: Checkout repository
@@ -62,9 +62,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_NEW_PAT }}
 
       - name: Get Released Version
-        id: get-version
+        id: setver
         run: |
-          VERSION=$(node -p "require('./package.json').version")
+          git fetch --tags
+          VERSION=$(git describe --tags --abbrev=0)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
