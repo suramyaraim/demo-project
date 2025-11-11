@@ -70,7 +70,7 @@ jobs:
             VERSION=$(git describe --tags --abbrev=0)
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "VERSION=$VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
   build_and_push:
     needs: [test, version]
