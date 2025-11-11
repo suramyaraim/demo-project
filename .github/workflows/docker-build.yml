@@ -32,21 +32,40 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      # - name: Run Semantic Release
+      #   id: semantic
+      #   run: |
+      #     npx semantic-release || echo "no new release"
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GH_NEW_PAT }}
+     
+      # - name: Get Released Version
+      #   id: setver
+      #   run: |
+      #     git fetch --tags
+      #     VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
+      #     VERSION=${VERSION#v}
+      #     echo "version=$VERSION" >> $GITHUB_OUTPUT
+      #     echo "Detected release version: $VERSION"
+
       - name: Run Semantic Release
         id: semantic
         run: |
-          npx semantic-release || echo "no new release"
+          # Run semantic-release and capture output
+          VERSION=$(npx semantic-release 2>&1 | tee /dev/tty | grep "Published release" | awk '{print $3}')
+          
+          # If no release was created, set version to 'none'
+          if [ -z "$VERSION" ]; then
+            VERSION=none
+          fi
+          
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GH_NEW_PAT }}
-     
-      - name: Get Released Version
-        id: setver
-        run: |
-          git fetch --tags
-          VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
-          VERSION=${VERSION#v}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Detected release version: $VERSION"
+
+      - name: Use released version
+        run: echo "The released version is ${{ steps.semantic.outputs.version }}"
+
           
   build-and-push:
     name: Build & Push Production Docker Image
