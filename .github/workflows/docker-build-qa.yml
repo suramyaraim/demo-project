@@ -7,22 +7,27 @@ on:
     branches: [qa]
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_NEW_PAT }}
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Build Docker Image for QA
+      - name: Build QA Docker Image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/demo-qa:latest .
 
-      - name: Push Docker Image for QA
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/demo-qa:latest
+      - name: Push QA Docker Image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/demo-qa:latest
 
-      - name: Print status
-        run: echo "Successfully pushed qa-latest image"
+      - name: Update Deployment Status
+        run: |
+          echo "QA deployment completed for latest image"
