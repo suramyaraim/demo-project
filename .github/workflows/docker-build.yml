@@ -36,7 +36,7 @@ jobs:
         id: semantic
         run: npx semantic-release
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Get Released Version
         id: get-version
